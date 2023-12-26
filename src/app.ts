@@ -1,15 +1,21 @@
 import express, { Express, Request, Response , Application } from 'express';
+import morgan from "morgan";
+
 import userRouter from "./router/user.js"
-//For env File
+import guildRouter from "./router/guild.js"
 
 const app: Application = express();
-const port =  8080;
+const port =  process.env.PORT || 8080;
 
-app.use('/user', userRouter);
+app.use(morgan("dev"));
+app.use(express.json());
+
+app.use('/users', userRouter);
+app.use('/guilds', guildRouter);
+
 app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to Express & TypeScript Server');
+  res.sendStatus(200);
 });
-
 
 app.listen(port, () => {
   console.log(`Server is Fire at http://localhost:${port}`);

@@ -16,6 +16,18 @@ router.get("/:id", async (req, res) => {
   const result = await userService.findById(parseInt(req.params.id));
   return selectResponse(result, res);
 })
+router.get("/:userId/guilds", async (req, res) => {
+  if(isNaN((parseInt(req.params.userId)))) return res.sendStatus(400);
+
+  const user = await userService.findById(parseInt(req.params.userId));
+
+  if(!isUser(user)) return selectResponse(user, res);
+
+  const result = await userService.findGuildByUser(user);
+
+  return selectResponse({user:user, guildList:result}, res);
+
+})
 
 router.post("/", async (req, res) => {
   if(!isUser(req.body)) return res.sendStatus(400);

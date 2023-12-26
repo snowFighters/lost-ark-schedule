@@ -36,5 +36,21 @@ async function findByGuild(guild: Guild) {
   }
 }
 
-const guildMemberRepository = {save, findByGuild};
+async function findByUser(user:User) {
+  const query = "SELECT guild_id FROM guild_member WHERE user_id = ?"
+  try {
+    const [resultList] = await connection.query<RowDataPacket[]>(query, [user.id]);
+    return resultList.map((result) => result.guild_id as number)
+  } catch (e) {
+    console.log(e);
+    if (e instanceof Error) {
+      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
+        return e.sqlMessage;
+      }
+    }
+    return null;
+  }
+}
+
+const guildMemberRepository = {save, findByGuild, findByUser};
 export default guildMemberRepository;

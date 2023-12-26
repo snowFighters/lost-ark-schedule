@@ -67,5 +67,21 @@ async function findByCode(code:string){
   }
 }
 
-const guildRepository = {save, findById, findByCode};
+async function findByIdList(idList : number[]){
+  const query = "SELECT * FROM GUILD WHERE id in (?)"
+  try {
+    const [resultList] = await connection.query<GuildRow[]>(query, [idList]);
+    return resultList.map(result =>  GuildRowToGuild(result));
+  } catch (e) {
+    console.log(e);
+    if (e instanceof Error) {
+      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
+        return e.sqlMessage;
+      }
+    }
+    return null;
+  }
+}
+
+const guildRepository = {save, findById, findByCode, findByIdList};
 export default guildRepository;

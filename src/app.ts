@@ -3,8 +3,9 @@ import morgan from "morgan";
 
 import userRouter from "./router/user.js"
 import guildRouter from "./router/guild.js"
+import {TspecDocsMiddleware} from "tspec";
 
-const app: Application = express();
+const app: Application =  express();
 const port =  process.env.PORT || 8080;
 
 app.use(morgan("dev"));
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use('/users', userRouter);
 app.use('/guilds', guildRouter);
+app.use('/docs', await TspecDocsMiddleware());
 
 app.get('/', (req: Request, res: Response) => {
   res.sendStatus(200);

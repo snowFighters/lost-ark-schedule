@@ -19,7 +19,7 @@ export type GuildApiSpec = Tspec.DefineApiSpec<{
     '/guilds': {
       post: {
         summary: '길드 생성하기',
-        body: { name: string, code: string },
+        body: { name: string},
         responses: { insertId: number },
       },
     },
@@ -38,9 +38,46 @@ export type GuildApiSpec = Tspec.DefineApiSpec<{
       },
     },
     '/guilds/{guildId}/members/{userId}': {
-      get: {
+      post: {
         summary: '길드에 유저 가입시키기 ',
         path: { guildId: number, userId:number },
+        responses: { insertId:number },
+      },
+    },
+    '/guilds/{guildId}/raids': {
+      get: {
+        summary: '길드 레이드 전체 조희 ',
+        path: { guildId: number },
+        responses: { },
+      },
+    },
+    '/guilds/{guildId}/raids/{raidId}': {
+      get: {
+        summary: '길드 레이드 조희 ',
+        path: { guildId: number, raidId:number },
+        responses: { },
+      },
+    },
+    '/guilds/{guildId}/raids/{contentId}': {
+      post: {
+        summary: '길드에 레이드 생성하기 ',
+        path: { guildId: number, contentId:number },
+        body:{ name:string, appoinmentTime:string}
+        responses: { insertId:number },
+      },
+    },
+    '/guilds/{guildId}/raids/{raidId}/members': {
+      get: {
+        summary: '레이드 첨여 인원 전체 조회 ',
+        path: { guildId: number, raidId:number, },
+        responses: { },
+      },
+    },
+    '/guilds/{guildId}/raids/{raidId}/members/{userId}': {
+      post: {
+        summary: '레이드 집어넣기 ',
+        path: { guildId: number, raidId:number, userId:number},
+        body:{ character:string,}
         responses: { insertId:number },
       },
     },

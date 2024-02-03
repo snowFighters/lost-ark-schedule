@@ -11,6 +11,7 @@ import contentService from "../service/content.js";
 import {isContent} from "../domain/content.js";
 import raidService from "../service/raid.js";
 import {isRaid} from "../domain/Raid.js";
+import {raidToRaidForm} from "../uitl/raidToRaidForm.js";
 
 
 const app = express.Router();
@@ -65,8 +66,15 @@ app.get("/:guildId/raids", async (req, res) => {
     return res.status(400).send({guild: guild});
   }
 
-  const result = await raidService.findByGuild(guild);
-  return selectResponse({guild: guild, raids: result}, res);
+  const results = await raidService.findByGuild(guild);
+  if (results instanceof Array) {
+    const asd = await Promise.all(results.map(async (result) => {
+      if (typeof result == "string") return;
+      return await raidToRaidForm(result);
+    }));
+    return selectResponse(asd, res);
+  }
+  return selectResponse({guild: guild, raids: results}, res);
 })
 
 app.get("/:guildId/raids/:raidId", async (req, res) => {

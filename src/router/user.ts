@@ -25,7 +25,7 @@ router.get("/:userId/guilds", async (req, res) => {
 
   const result = await userService.findGuildByUser(user);
 
-  return selectResponse({user:user, guildList:result}, res);
+  return selectResponse(result, res);
 
 })
 

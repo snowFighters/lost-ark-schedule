@@ -1,12 +1,13 @@
 import express, { Express, Request, Response , Application } from 'express';
 import morgan from "morgan";
+import 'dotenv/config';
 
 import userRouter from "./router/user.js"
 import guildRouter from "./router/guild.js"
 import {TspecDocsMiddleware} from "tspec";
 
 const app: Application =  express();
-const port =  process.env.PORT || 8080;
+const port =  process.env.PORT;
 
 app.use(morgan("dev"));
 app.use(express.json());

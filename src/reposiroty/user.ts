@@ -22,7 +22,7 @@ function userRowToUser(obj:UserRow) {
 }
 
 async function save(user: User) {
-  const query = "INSERT INTO USER VALUES (NULL, ?)";
+  const query = "INSERT INTO user VALUES (NULL, ?)";
   try {
     const [result] = await connection.query<ResultSetHeader>(query, [[user.email, user.password, user.characterName]]);
     return result.insertId;
@@ -38,7 +38,7 @@ async function save(user: User) {
 }
 
 async function findById(id:number){
-  const query = "SELECT * FROM USER WHERE id = ?";
+  const query = "SELECT * FROM user WHERE id = ?";
   try {
     const [[result]] = await connection.query<[UserRow]>(query, [id]);
     return userRowToUser(result);
@@ -54,7 +54,7 @@ async function findById(id:number){
 }
 
 async function findByIdList(idList:number[]){
-  const query = "SELECT * FROM USER WHERE id IN (?)";
+  const query = "SELECT * FROM user WHERE id IN (?)";
   try {
     const [resultList] = await connection.query<[UserRow]>(query, [idList]);
     return resultList.map(result => userRowToUser(result))

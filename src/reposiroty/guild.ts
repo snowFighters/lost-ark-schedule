@@ -19,7 +19,7 @@ function GuildRowToGuild(obj:GuildRow) {
 }
 
 async function save(guild: Guild) {
-  const query = "INSERT INTO GUILD VALUES (NULL, ?)";
+  const query = "INSERT INTO guild VALUES (NULL, ?)";
   try {
     const [result] = await connection.query<ResultSetHeader>(query, [[guild.name, guild.code]]);
     return result.insertId;
@@ -35,7 +35,7 @@ async function save(guild: Guild) {
 }
 
 async function findById(id:number){
-  const query = "SELECT * FROM GUILD WHERE id = ?";
+  const query = "SELECT * FROM guild WHERE id = ?";
   try {
     const [[result]] = await connection.query<[GuildRow]>(query, [id]);
     return GuildRowToGuild(result);
@@ -52,7 +52,7 @@ async function findById(id:number){
 }
 
 async function findByCode(code:string){
-  const query = "SELECT * FROM GUILD WHERE code = ?"
+  const query = "SELECT * FROM guild WHERE code = ?"
   try {
     const [[result]] = await connection.query<[GuildRow]>(query, [code]);
     return GuildRowToGuild(result);
@@ -68,7 +68,7 @@ async function findByCode(code:string){
 }
 
 async function findByIdList(idList : number[]){
-  const query = "SELECT * FROM GUILD WHERE id in (?)"
+  const query = "SELECT * FROM guild WHERE id in (?)"
   try {
     const [resultList] = await connection.query<GuildRow[]>(query, [idList]);
     return resultList.map(result =>  GuildRowToGuild(result));

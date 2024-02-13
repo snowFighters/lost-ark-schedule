@@ -60,7 +60,7 @@ async function findById(id:number){
 }
 
 async function findByGuild(guild:Guild){
-    const query = "SELECT * FROM raid WHERE guild_id = ?";
+    const query = "SELECT * FROM raid WHERE guild_id = ? ORDER BY appoinment_time";
     try {
         const [results] = await connection.query<RaidRow[]>(query, [guild.id]);
         return results.map((result) =>  {return  RaidRowToRaid(result)});

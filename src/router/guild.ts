@@ -34,7 +34,7 @@ app.get("/:guildId/members/", async (req, res) => {
 
   const result = {guild: guild, member: await guildService.findMembersByGuild(guild)};
 
-  return selectResponse(result, res);
+  return res.send(result.member);
 })
 
 app.post("/", async (req, res) => {

@@ -109,7 +109,7 @@ app.get("/:guildId/raids/:raidId/members", async (req, res) => {
   if (!isGuild(guild) || !isRaid(raid)) return res.sendStatus(400);
 
   const result = await raidService.findMembersByRaid(raid)
-  return selectResponse({raid: raid, members: result}, res);
+  return res.send(result);
 })
 
 

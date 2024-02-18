@@ -3,6 +3,20 @@ import {User} from "../domain/User.js";
 import {connection} from "../config/dbconfig.js";
 import {ResultSetHeader, RowDataPacket} from "mysql2";
 import {Guild} from "../domain/Guild.js";
+import {UserCharacter} from "../domain/form/UserCharacter.js";
+
+interface UserCharacterForm extends RowDataPacket {
+  user_id:number;
+  character:string;
+}
+
+function userCharacterConvert(obj:UserCharacterForm){
+  return {
+    userId:obj.user_id,
+    character:obj.character
+  } as UserCharacter;
+}
+
 
 async function save(raid: Raid, user:User, character:string){
   const query = "INSERT INTO raid_member VALUES (NULL, ?, ?, ?)"
@@ -20,10 +34,10 @@ async function save(raid: Raid, user:User, character:string){
   }
 }
 async function findByRaid(raid: Raid) {
-  const query = "SELECT user_id FROM raid_member WHERE raid_id = ?"
+  const query = "SELECT user_id, `character` FROM raid_member WHERE raid_id = ?"
   try {
-    const [resultList] = await connection.query<RowDataPacket[]>(query, [raid.id]);
-    return resultList.map((result) => result.user_id as number)
+    const [resultList] = await connection.query<UserCharacterForm[]>(query, [raid.id]);
+    return resultList.map((result) => {return userCharacterConvert(result)});
   } catch (e) {
     console.log(e);
     if (e instanceof Error) {

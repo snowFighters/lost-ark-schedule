@@ -2,6 +2,7 @@ import express from "express";
 import {saveResponse, selectResponse} from "../uitl/saveResponse.js";
 import {User, isUser} from "../domain/User.js";
 import userService from "../service/user.js";
+import raidService from "../service/raid.js";
 
 
 
@@ -31,6 +32,19 @@ router.get("/:userId/guilds", async (req, res) => {
 
   return selectResponse(result, res);
 
+})
+
+router.get("/:userId/raids", async (req, res) => {
+  if(isNaN((parseInt(req.params.userId)))) return res.sendStatus(400);
+  
+  const user = await userService.findById(parseInt(req.params.userId));
+  if(!isUser(user)) return selectResponse(user, res);
+  
+  const result = await raidService.findRaidByUserId(user.id);
+  
+  return selectResponse(result, res);
+  
+  
 })
 
 router.post("/", async (req, res) => {

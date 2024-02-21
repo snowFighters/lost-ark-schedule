@@ -1,4 +1,4 @@
-import {Raid} from "../domain/Raid.js";
+import {isRaid, Raid} from "../domain/Raid.js";
 import raidRepository from "../reposiroty/raid.js";
 import {Guild} from "../domain/Guild.js";
 import {Content} from "../domain/content.js";
@@ -44,9 +44,22 @@ async function findMembersByRaid(raid: Raid) {
   return results;
 }
 
+async function findRaidByUserId(userId: number) {
+  const results = await raidMemberRepository.findByUserId(userId);
+  if (results instanceof Array) {
+    return Promise.all(results.map(async (result) => {
+      const raid = await raidRepository.findById(result.raidId);
+      if (isRaid(raid)) {
+        return raid
+      }
+    }));
+  }
+  return results;
+}
+
 async function joinRaid(raid: Raid, user: User, character: string) {
   return await raidMemberRepository.save(raid, user, character);
 }
 
-const raidService = {save, saveByGuildAndContent, findByGuild, findById, joinRaid, findMembersByRaid};
+const raidService = {save, saveByGuildAndContent, findByGuild, findById, joinRaid, findMembersByRaid, findRaidByUserId};
 export default raidService;

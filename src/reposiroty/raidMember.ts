@@ -4,19 +4,29 @@ import {connection} from "../config/dbconfig.js";
 import {ResultSetHeader, RowDataPacket} from "mysql2";
 import {Guild} from "../domain/Guild.js";
 import {UserCharacter} from "../domain/form/UserCharacter.js";
+import {RaidCharacter} from "../domain/form/RaidCharacter";
 
 interface UserCharacterForm extends RowDataPacket {
   user_id:number;
   character:string;
 }
 
+interface RaidCharacterForm extends RowDataPacket {
+  raid_id:number;
+  character:string;
+}
 function userCharacterConvert(obj:UserCharacterForm){
   return {
     userId:obj.user_id,
     character:obj.character
   } as UserCharacter;
 }
-
+function raidCharacterConvert(obj:RaidCharacterForm){
+  return {
+    raidId:obj.raid_id,
+    character:obj.character
+  } as RaidCharacter;
+}
 
 async function save(raid: Raid, user:User, character:string){
   const query = "INSERT INTO raid_member VALUES (NULL, ?, ?, ?)"
@@ -48,7 +58,22 @@ async function findByRaid(raid: Raid) {
     return null;
   }
 }
+async function findByUserId(userId: number) {
+  const query = "SELECT raid_id, `character` FROM raid_member WHERE user_id = ?"
+  try {
+    const [resultList] = await connection.query<RaidCharacterForm[]>(query, [userId]);
+    return resultList.map((result) => {return raidCharacterConvert(result)});
+  } catch (e) {
+    console.log(e);
+    if (e instanceof Error) {
+      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
+        return e.sqlMessage;
+      }
+    }
+    return null;
+  }
+}
 
-const raidMemberRepository = {save, findByRaid};
+const raidMemberRepository = {save, findByRaid, findByUserId};
 
 export default raidMemberRepository;

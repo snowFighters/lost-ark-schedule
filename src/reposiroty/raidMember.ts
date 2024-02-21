@@ -49,6 +49,23 @@ async function findByRaid(raid: Raid) {
   }
 }
 
-const raidMemberRepository = {save, findByRaid};
+async function deleteByIdAndUserAndCharacter(raidId:number, userId:number, character:string){
+  const query = "DELETE FROM raid_member WHERE raid_id = ? AND user_id = ? AND `character` = ?;"
+  try {
+    const [result] = await connection.query<ResultSetHeader>(query, [raidId, userId, character]);
+    console.log(result);
+    return result.insertId;
+  } catch (e) {
+    console.log(e);
+    if (e instanceof Error) {
+      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
+        return e.sqlMessage;
+      }
+    }
+    return null;
+  }
+}
+
+const raidMemberRepository = {save, findByRaid, deleteByIdAndUserAndCharacter};
 
 export default raidMemberRepository;

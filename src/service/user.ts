@@ -11,6 +11,10 @@ async function findById(id:number){
   return await userRepository.findById(id)
 }
 
+async function findByEmail(email:string){
+  return await userRepository.findByEmail(email)
+}
+
 async function findGuildByUser(user:User){
   const guildList = await guildMemberRepository.findByUser(user);
   if(guildList instanceof Array){
@@ -20,5 +24,5 @@ async function findGuildByUser(user:User){
 }
 
 
-const userService = {save, findById, findGuildByUser};
+const userService = {save, findById, findGuildByUser, findByEmail};
 export default userService;

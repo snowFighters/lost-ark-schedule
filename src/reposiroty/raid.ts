@@ -75,5 +75,22 @@ async function findByGuild(guild:Guild){
     }
 }
 
-const raidRepository = {save, findById, findByGuild};
+async function deleteById(raidId:number){
+    const query = "DELETE FROM raid WHERE id = ?;"
+    try {
+        const [result] = await connection.query<ResultSetHeader>(query, [raidId]);
+        console.log(result);
+        return result.insertId;
+    } catch (e) {
+        console.log(e);
+        if (e instanceof Error) {
+            if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
+                return e.sqlMessage;
+            }
+        }
+        return null;
+    }
+}
+
+const raidRepository = {save, findById, findByGuild, deleteById};
 export default raidRepository;

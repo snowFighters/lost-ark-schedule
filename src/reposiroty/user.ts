@@ -52,6 +52,21 @@ async function findById(id:number){
     return null;
   }
 }
+async function findByEmail(email:string){
+  const query = "SELECT * FROM user WHERE email = ?";
+  try {
+    const [[result]] = await connection.query<[UserRow]>(query, [email]);
+    return userRowToUser(result);
+  }catch (e) {
+    console.log(e);
+    if (e instanceof Error) {
+      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
+        return e.sqlMessage;
+      }
+    }
+    return null;
+  }
+}
 
 async function findByIdList(idList:number[]){
   const query = "SELECT * FROM user WHERE id IN (?)";
@@ -70,5 +85,5 @@ async function findByIdList(idList:number[]){
 }
 
 
-const userRepository = {save, findById, findByIdList};
+const userRepository = {save, findById, findByIdList, findByEmail};
 export default userRepository;

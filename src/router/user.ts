@@ -7,6 +7,10 @@ import userService from "../service/user.js";
 
 const router = express.Router();
 router.get("/", async (req, res) => {
+  if(typeof (req.query.email) == "string"){
+    const result = await userService.findByEmail(req.query.email);
+    return selectResponse(result, res);
+  }
   res.send("OK");
 })
 router.get("/:id", async (req, res) => {

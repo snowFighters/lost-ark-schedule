@@ -4,8 +4,6 @@ import {Guild} from "../domain/Guild.js";
 import {Content} from "../domain/content.js";
 import {isUser, User} from "../domain/User.js";
 import raidMemberRepository from "../reposiroty/raidMember.js";
-import guildMemberRepository from "../reposiroty/guildMember.js";
-import userRepository from "../reposiroty/user.js";
 import userService from "./user.js";
 import {RaidMember} from "../domain/form/RaidMember.js";
 
@@ -43,10 +41,18 @@ async function findMembersByRaid(raid: Raid) {
   }
   return results;
 }
+async function deleteById(raidId:number){
+  return await raidRepository.deleteById(raidId);
+}
 
 async function joinRaid(raid: Raid, user: User, character: string) {
   return await raidMemberRepository.save(raid, user, character);
 }
 
-const raidService = {save, saveByGuildAndContent, findByGuild, findById, joinRaid, findMembersByRaid};
+
+async function exitRaid(raidId:number, userId:number, character:string){
+  return await raidMemberRepository.deleteByIdAndUserAndCharacter(raidId, userId, character);
+}
+
+const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid};
 export default raidService;

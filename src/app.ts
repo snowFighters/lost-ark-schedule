@@ -4,6 +4,7 @@ import 'dotenv/config';
 
 import userRouter from "./router/user.js"
 import guildRouter from "./router/guild.js"
+import raidRouter from "./router/raid.js";
 import {TspecDocsMiddleware} from "tspec";
 
 const app: Application =  express();
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use('/users', userRouter);
 app.use('/guilds', guildRouter);
+app.use('/raids', raidRouter)
 app.use('/docs', await TspecDocsMiddleware());
 
 app.get('/', (req: Request, res: Response) => {

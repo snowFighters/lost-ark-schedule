@@ -91,7 +91,6 @@ async function deleteByIdAndUserAndCharacter(raidId:number, userId:number, chara
   }
 }
 
-const raidMemberRepository = {save, findByRaid, deleteByIdAndUserAndCharacter};
-
+const raidMemberRepository = {save, findByRaid, deleteByIdAndUserAndCharacter, findByUserId};
 
 export default raidMemberRepository;

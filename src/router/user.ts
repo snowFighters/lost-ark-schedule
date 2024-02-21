@@ -4,8 +4,6 @@ import {User, isUser} from "../domain/User.js";
 import userService from "../service/user.js";
 import raidService from "../service/raid.js";
 
-
-
 const router = express.Router();
 router.get("/", async (req, res) => {
   if(typeof (req.query.email) == "string"){
@@ -53,4 +51,4 @@ router.post("/", async (req, res) => {
   return saveResponse(result, res);
 })
 
-export default router
+export default router;

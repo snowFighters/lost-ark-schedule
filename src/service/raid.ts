@@ -6,6 +6,7 @@ import {isUser, User} from "../domain/User.js";
 import raidMemberRepository from "../reposiroty/raidMember.js";
 import userService from "./user.js";
 import {RaidMember} from "../domain/form/RaidMember.js";
+import {raidToRaidForm} from "../uitl/raidToRaidForm.js";
 
 async function save(raid: Raid) {
   const result = await raidRepository.save(raid);
@@ -51,7 +52,7 @@ async function findRaidByUserId(userId: number) {
     return Promise.all(results.map(async (result) => {
       const raid = await raidRepository.findById(result.raidId);
       if (isRaid(raid)) {
-        return raid
+        return raidToRaidForm(raid);
       }
     }));
   }
@@ -67,6 +68,8 @@ async function exitRaid(raidId:number, userId:number, character:string){
   return await raidMemberRepository.deleteByIdAndUserAndCharacter(raidId, userId, character);
 }
 
-const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid};
+
+
+const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid, findRaidByUserId};
 
 export default raidService;

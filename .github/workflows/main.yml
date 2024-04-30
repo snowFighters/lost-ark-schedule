@@ -8,7 +8,7 @@ on:
       - '**'
 jobs:
   backend-deploy:
-    runs-on: linux/arm/v8
+    runs-on: ubuntu-latest
     steps:
       # SOURCE 단계 - 저장소 Checkout
       - name: Checkout-source code

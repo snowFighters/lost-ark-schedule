@@ -27,7 +27,7 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: jonghyeok123/lost-ark-schedule
-          platforms: linux/arm64/v8
+          platforms: linux/amd64,linux/arm64/v8
         # WAS 인스턴스 접속 & 애플리케이션 실행
       - name: Connect to WAS & Execute Application
         uses: appleboy/ssh-action@v0.1.6

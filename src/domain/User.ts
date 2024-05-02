@@ -40,6 +40,14 @@ export type UserApiSpec = Tspec.DefineApiSpec<{
         responses: { 200: User },
       },
     },
+    '/users/{id}/raids':{
+      get:{
+        summary: '소속 레이드 찾아오기'
+        path: { id: number },
+        
+      }
+    }
+    
   }
 }>;
 

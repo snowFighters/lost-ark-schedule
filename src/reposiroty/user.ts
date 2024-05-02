@@ -12,7 +12,7 @@ interface UserRow extends  RowDataPacket {
 
 function userRowToUser(obj:UserRow) {
   if(typeof obj == "undefined")
-    return "There is no object";
+    return null;
   return{
     id:obj.id,
     email:obj.email,
@@ -44,11 +44,6 @@ async function findById(id:number){
     return userRowToUser(result);
   }catch (e) {
     console.log(e);
-    if (e instanceof Error) {
-      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
-        return e.sqlMessage;
-      }
-    }
     return null;
   }
 }

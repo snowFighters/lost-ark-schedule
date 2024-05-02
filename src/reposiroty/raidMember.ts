@@ -35,11 +35,6 @@ async function save(raid: Raid, user:User, character:string){
     return result.insertId;
   } catch (e) {
     console.log(e);
-    if (e instanceof Error) {
-      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
-        return e.sqlMessage;
-      }
-    }
     return null;
   }
 }
@@ -50,11 +45,6 @@ async function findByRaid(raid: Raid) {
     return resultList.map((result) => {return userCharacterConvert(result)});
   } catch (e) {
     console.log(e);
-    if (e instanceof Error) {
-      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
-        return e.sqlMessage;
-      }
-    }
     return null;
   }
 }

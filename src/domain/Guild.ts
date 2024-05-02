@@ -13,13 +13,20 @@ export function isGuild(obj: any): obj is Guild {
   return true;
 }
 
+export interface GuildCreate extends Omit<Guild, "id"|"code">{}
+
+export function idGuildCreate(obj: any): obj is GuildCreate{
+  if(typeof obj.name != "string") return false;
+  return true
+}
+
 export type GuildApiSpec = Tspec.DefineApiSpec<{
   tags:['Guild'],
   paths: {
     '/guilds': {
       post: {
         summary: '길드 생성하기',
-        body: { name: string},
+        body: GuildCreate,
         responses: { insertId: number },
       },
     },
@@ -34,7 +41,7 @@ export type GuildApiSpec = Tspec.DefineApiSpec<{
       get: {
         summary: '길드의 유저 찾아오기',
         path: { guildId: number },
-        responses: { guild: Guild, users:User[] },
+        responses: {member:User[] },
       },
     },
     '/guilds/{guildId}/members/{userId}': {
@@ -49,36 +56,6 @@ export type GuildApiSpec = Tspec.DefineApiSpec<{
         summary: '길드 레이드 전체 조희 ',
         path: { guildId: number },
         responses: { },
-      },
-    },
-    '/guilds/{guildId}/raids/{raidId}': {
-      get: {
-        summary: '길드 레이드 조희 ',
-        path: { guildId: number, raidId:number },
-        responses: { },
-      },
-    },
-    '/guilds/{guildId}/raids/{contentId}': {
-      post: {
-        summary: '길드에 레이드 생성하기 ',
-        path: { guildId: number, contentId:number },
-        body:{ name:string, appoinmentTime:string}
-        responses: { insertId:number },
-      },
-    },
-    '/guilds/{guildId}/raids/{raidId}/members': {
-      get: {
-        summary: '레이드 첨여 인원 전체 조회 ',
-        path: { guildId: number, raidId:number, },
-        responses: { },
-      },
-    },
-    '/guilds/{guildId}/raids/{raidId}/members/{userId}': {
-      post: {
-        summary: '레이드 집어넣기 ',
-        path: { guildId: number, raidId:number, userId:number},
-        body:{ character:string,}
-        responses: { insertId:number },
       },
     },
   }

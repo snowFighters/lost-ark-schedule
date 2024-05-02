@@ -6,6 +6,7 @@ export interface RaidForm {
   content: Content,
   name: string,
   appoinmentTime: string;
+  isRegular:number;
 }
 
 

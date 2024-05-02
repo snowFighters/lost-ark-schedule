@@ -1,4 +1,4 @@
-import {isRaid, Raid} from "../domain/Raid.js";
+import {isRaid, Raid, RaidCreate} from "../domain/Raid.js";
 import raidRepository from "../reposiroty/raid.js";
 import {Guild} from "../domain/Guild.js";
 import {Content} from "../domain/content.js";
@@ -8,7 +8,7 @@ import userService from "./user.js";
 import {RaidMember} from "../domain/form/RaidMember.js";
 import {raidToRaidForm} from "../util/raidToRaidForm.js";
 
-async function save(raid: Raid) {
+async function save(raid: RaidCreate) {
   const result = await raidRepository.save(raid);
   return result;
 }
@@ -28,20 +28,22 @@ async function findByGuild(guild: Guild) {
 }
 
 async function findMembersByRaid(raid: Raid) {
-  const results = await raidMemberRepository.findByRaid(raid);
-  if (results instanceof Array) {
-    return Promise.all(results.map(async (result) => {
+  const raidMembers = await raidMemberRepository.findByRaid(raid);
+  if (raidMembers) {
+    const results = await Promise.all(raidMembers.map(async (result) => {
       const user = await userService.findById(result.userId);
-      if (isUser(user)) {
-        return {
-          user: user,
-          character: result.character,
-        } as RaidMember;
-      }
-    }));
+      if (user) return {user: user, character: result.character,} as RaidMember;
+      return null
+    }))
+    return results.filter((result):result is RaidMember => result !== null);
   }
-  return results;
+  return raidMembers;
 }
+
+async function updateById(id: number, raid: RaidCreate) {
+  return raidRepository.updateById(id, raid);
+}
+
 async function deleteById(raidId:number){
   return await raidRepository.deleteById(raidId);
 }
@@ -70,6 +72,7 @@ async function exitRaid(raidId:number, userId:number, character:string){
 
 
 
-const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid, findRaidByUserId};
+
+const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid, findRaidByUserId, updateById};
 
 export default raidService;

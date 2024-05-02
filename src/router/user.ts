@@ -41,8 +41,6 @@ router.get("/:userId/raids", async (req, res) => {
   const result = await raidService.findRaidByUserId(user.id);
   
   return selectResponse(result, res);
-  
-  
 })
 
 router.post("/", async (req, res) => {

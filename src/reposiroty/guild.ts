@@ -10,7 +10,7 @@ interface GuildRow extends RowDataPacket {
 
 function GuildRowToGuild(obj:GuildRow) {
   if(typeof obj == "undefined")
-    return "There is no object";
+    return null;
   return{
     id:obj.id,
     name:obj.name,
@@ -22,14 +22,9 @@ async function save(guild: Guild) {
   const query = "INSERT INTO guild VALUES (NULL, ?)";
   try {
     const [result] = await connection.query<ResultSetHeader>(query, [[guild.name, guild.code]]);
-    return result.insertId;
+    return result;
   } catch (e) {
     console.log(e);
-    if (e instanceof Error) {
-      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
-        return e.sqlMessage;
-      }
-    }
     return null;
   }
 }
@@ -41,11 +36,6 @@ async function findById(id:number){
     return GuildRowToGuild(result);
   } catch (e) {
     console.log(e);
-    if (e instanceof Error) {
-      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
-        return e.sqlMessage;
-      }
-    }
     return null;
   }
 
@@ -58,11 +48,6 @@ async function findByCode(code:string){
     return GuildRowToGuild(result);
   } catch (e) {
     console.log(e);
-    if (e instanceof Error) {
-      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
-        return e.sqlMessage;
-      }
-    }
     return null;
   }
 }

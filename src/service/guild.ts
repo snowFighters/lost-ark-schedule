@@ -19,9 +19,6 @@ async function findByCode(code:string){
 
 async function findMembersByGuild(guild:Guild){
   const result = await guildMemberRepository.findByGuild(guild);
-  if(result instanceof Array){
-    return await userRepository.findByIdList(result);
-  }
   return result;
 }
 

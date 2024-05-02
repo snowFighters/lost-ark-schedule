@@ -1,4 +1,4 @@
-import validateEmail from "../uitl/validateEmail.js";
+import validateEmail from "../util/validateEmail.js";
 import {Tspec} from "tspec";
 
 

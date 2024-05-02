@@ -1,5 +1,5 @@
 import express from "express";
-import {saveResponse, selectResponse} from "../uitl/saveResponse.js";
+import {saveResponse, selectResponse} from "../util/saveResponse.js";
 import {User, isUser} from "../domain/User.js";
 import userService from "../service/user.js";
 import raidService from "../service/raid.js";

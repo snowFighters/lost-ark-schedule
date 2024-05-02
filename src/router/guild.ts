@@ -1,6 +1,6 @@
 import express from "express";
-import {createGuild} from "../uitl/createGuild.js";
-import {saveResponse, selectResponse} from "../uitl/saveResponse.js";
+import {createGuild} from "../util/createGuild.js";
+import {saveResponse, selectResponse} from "../util/saveResponse.js";
 
 import {Guild, isGuild} from "../domain/Guild.js";
 
@@ -11,7 +11,7 @@ import contentService from "../service/content.js";
 import {isContent} from "../domain/content.js";
 import raidService from "../service/raid.js";
 import {isRaid} from "../domain/Raid.js";
-import {raidToRaidForm} from "../uitl/raidToRaidForm.js";
+import {raidToRaidForm} from "../util/raidToRaidForm.js";
 
 
 const app = express.Router();

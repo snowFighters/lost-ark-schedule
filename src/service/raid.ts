@@ -6,7 +6,7 @@ import {isUser, User} from "../domain/User.js";
 import raidMemberRepository from "../reposiroty/raidMember.js";
 import userService from "./user.js";
 import {RaidMember} from "../domain/form/RaidMember.js";
-import {raidToRaidForm} from "../uitl/raidToRaidForm.js";
+import {raidToRaidForm} from "../util/raidToRaidForm.js";
 
 async function save(raid: Raid) {
   const result = await raidRepository.save(raid);

@@ -28,11 +28,6 @@ async function save(user: User) {
     return result.insertId;
   } catch (e) {
     console.log(e);
-    if (e instanceof Error) {
-      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
-        return e.sqlMessage;
-      }
-    }
     return null;
   }
 }

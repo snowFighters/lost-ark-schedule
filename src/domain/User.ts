@@ -20,6 +20,10 @@ export type UserApiSpec = Tspec.DefineApiSpec<{
   tags:['User'],
   paths: {
     '/users': {
+      get:{
+        summary:"이메일로 유저 조회하기",
+        query:{email:string}
+      }
       post: {
         summary: '유저 저장하기',
         body: { email: string, password: string, characterName: string },

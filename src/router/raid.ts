@@ -21,7 +21,7 @@ router.get("/:raidId/members", async (req, res) => {
   if (!raid) return res.sendStatus(400);
   const result = await raidService.findMembersByRaid(raid);
   if (!result) return res.sendStatus(500);
-  return res.send({raidMember: result});
+  return res.send(result);
 })
 
 

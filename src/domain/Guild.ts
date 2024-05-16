@@ -8,6 +8,7 @@ export interface Guild {
 }
 
 export function isGuild(obj: any): obj is Guild {
+  if(obj == null) return false
   if (typeof obj.name != "string") return false
   else if (typeof obj.code != "string") return false
   return true;

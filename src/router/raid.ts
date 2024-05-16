@@ -37,12 +37,12 @@ router.post("/", async (req, res) => {
 })
 
 router.post("/:raidId/members", async (req, res) => {
-  if (isNaN(req.body.memberId) || typeof req.body.character != 'string') return res.sendStatus(400);
+  if (isNaN(req.body.memberId) || typeof req.body.character != 'string' || isNaN(req.body.role)) return res.sendStatus(400);
   
   const raid = await raidService.findById(parseInt(req.params.raidId));
   const member = await userService.findById(req.body.memberId);
   if (raid == null || member == null) return res.sendStatus(400);
-  const result = await raidService.joinRaid(raid, member, req.body.character);
+  const result = await raidService.joinRaid(raid, member, req.body.character, req.body.role);
   if (!result) return res.sendStatus(500);
   
   return res.send("OK");

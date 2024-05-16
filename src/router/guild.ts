@@ -27,31 +27,33 @@ app.get("/:code", async (req, res) => {
 
 app.get("/:guildId/members/", async (req, res) => {
   if (isNaN(parseInt(req.params.guildId))) return res.sendStatus(400);
-  
+
   const guild = await guildService.findById(parseInt(req.params.guildId));
   if (!guild) {
     return res.status(400).send("GuildID is incorrect");
   }
-  
+
   const members = await guildService.findMembersByGuild(guild);
   if (!members) {
     return res.status(400).send("no member found");
   }
-  const result = await Promise.all(members.map(async (member) => {return await userService.findById(member)}));
+  const result = await Promise.all(members.map(async (member) => {
+    return await userService.findById(member)
+  }));
   return res.send(result);
 })
 
 app.post("/", async (req, res) => {
   if (!idGuildCreate(req.body)) return res.sendStatus(400);
   const result = await guildService.save(await createGuild(req.body));
-  
+
   if (result == null) return res.send(500);
   return res.send({insertId: result.insertId});
 })
 
 app.post("/:guildId/members/:userId", async (req, res) => {
   if (isNaN(parseInt(req.params.guildId)) || isNaN(parseInt(req.params.userId))) return res.sendStatus(400);
-  
+
   const guild = await guildService.findById(parseInt(req.params.guildId));
   const user = await userService.findById(parseInt(req.params.userId));
   if (!guild || !user) {
@@ -64,17 +66,18 @@ app.post("/:guildId/members/:userId", async (req, res) => {
 
 app.get("/:guildId/raids", async (req, res) => {
   if (isNaN(parseInt(req.params.guildId))) return res.sendStatus(400);
-  
+
   const guild = await guildService.findById(parseInt(req.params.guildId));
   if (!guild) {
     return res.status(400).send({guild: guild});
   }
-  
+
   const raids = await raidService.findByGuild(guild);
   if (raids == null) return res.status(400).send("No raid Found");
   const result = await Promise.all(raids.map(async (raid) => {
     const content = await contentService.findById(raid.contentId);
-    return {...raid, content}
+    const counts = await raidService.readMemberCountByRaid(raid);
+    return {...raid, content, ...counts as any}
   }))
   return res.send(result);
 })

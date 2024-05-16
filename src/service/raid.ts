@@ -61,8 +61,8 @@ async function findRaidByUserId(userId: number) {
   return results;
 }
 
-async function joinRaid(raid: Raid, user: User, character: string) {
-  return await raidMemberRepository.save(raid, user, character);
+async function joinRaid(raid: Raid, user: User, character: string, role:number) {
+  return await raidMemberRepository.save(raid, user, character, role);
 }
 
 
@@ -70,9 +70,13 @@ async function exitRaid(raidId:number, userId:number, character:string){
   return await raidMemberRepository.deleteByIdAndUserAndCharacter(raidId, userId, character);
 }
 
+async function readMemberCountByRaid(raid:Raid){
+  return await raidMemberRepository.findMemberCountByRaid(raid)
+}
 
 
 
-const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid, findRaidByUserId, updateById};
+
+const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid, findRaidByUserId, updateById, readMemberCountByRaid};
 
 export default raidService;

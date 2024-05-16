@@ -62,7 +62,7 @@ export type RaidApiSpec = Tspec.DefineApiSpec<{
       post: {
         summary: '레이드 멤버 추가',
         path: { raidId: string },
-        body:{memberId:number, character:string}
+        body:{memberId:number, character:string, role:string}
       }
     }
     '/raids/{raidId}/users/{userId}': {

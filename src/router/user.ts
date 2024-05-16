@@ -48,6 +48,7 @@ router.get("/:userId/raids", async (req, res) => {
 
 router.post("/", async (req, res) => {
   if (!isUser(req.body)) return res.sendStatus(400);
+  if(await userService.findByEmail(req.body.email)) return res.sendStatus(400);
   const result = await userService.save(req.body);
   return saveResponse(result, res);
 })

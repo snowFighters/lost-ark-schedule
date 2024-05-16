@@ -36,7 +36,7 @@ export async function asdasd(raidId: number) {
       const members = await raidService.findMembersByRaid(raid2);
       if(!members) return;
       
-        members.map(async (member) => {await raidService.joinRaid(raid1, member.user, member.character)});
+        members.map(async (member) => {await raidService.joinRaid(raid1, member.user, member.character, member.role)});
       
       asdasd(raid1.id);
     }

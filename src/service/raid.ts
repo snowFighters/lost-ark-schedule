@@ -54,7 +54,7 @@ async function findRaidByUserId(userId: number) {
     return Promise.all(results.map(async (result) => {
       const raid = await raidRepository.findById(result.raidId);
       if (isRaid(raid)) {
-        return raidToRaidForm(raid);
+        return raid
       }
     }));
   }

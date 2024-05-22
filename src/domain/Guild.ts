@@ -25,16 +25,19 @@ export type GuildApiSpec = Tspec.DefineApiSpec<{
   tags:['Guild'],
   paths: {
     '/guilds': {
+      get:{
+        query:{code:string},
+      },
       post: {
         summary: '길드 생성하기',
         body: GuildCreate,
         responses: { insertId: number },
       },
     },
-    '/guilds/{code}': {
+    '/guilds/{id}': {
       get: {
         summary: '길드 코드로 찾아오기',
-        path: { code: string },
+        path: { id: string },
         responses: { 200: Guild },
       },
     },

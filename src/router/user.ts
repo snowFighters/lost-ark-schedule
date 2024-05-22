@@ -6,6 +6,8 @@ import raidService from "../service/raid.js";
 import * as url from "url";
 import axios from "axios";
 import userRepository from "../reposiroty/user.js";
+import guildService from "../service/guild.js";
+import contentService from "../service/content.js";
 
 const router = express.Router();
 router.get("/", async (req, res) => {
@@ -42,8 +44,17 @@ router.get("/:userId/raids", async (req, res) => {
   if (!isUser(user)) return selectResponse(user, res);
 
   const result = await raidService.findRaidByUserId(user.id);
+  if(result == null || typeof result == "string") return res.send(400);
 
-  return selectResponse(result, res);
+  const a = await Promise.all(result.map(async (r) => {
+    if(!r) return null;
+    const guild = await guildService.findById(r.guildId);
+    const counts = await raidService.readMemberCountByRaid(r);
+    const content = await contentService.findById(r.contentId);
+
+    return {...r, guild:guild, content,  ...counts as any, };
+  }));
+  return res.send(a);
 })
 
 router.post("/", async (req, res) => {

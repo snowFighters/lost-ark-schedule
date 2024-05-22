@@ -13,7 +13,7 @@ export async function asdasd(raidId: number) {
     console.log(`[${new Date()}]  ${raid.id}.${raid.name} 푸시알림 발동`)
     
     let date1 = new Date(raid.appoinmentTime);
-    date1.setSeconds(date1.getSeconds() + 10);
+    date1.setDate(date1.getDate() + 7);
     
     const raid2 = await raidService.findById(raidId);
     if (!raid2) return;

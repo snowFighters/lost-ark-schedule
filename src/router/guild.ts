@@ -15,15 +15,19 @@ import {raidToRaidForm} from "../util/raidToRaidForm.js";
 
 
 const app = express.Router();
-app.get("/", (req, res) => {
-  return res.send("OK");
-})
-
-app.get("/:code", async (req, res) => {
-  const result = await guildService.findByCode(req.params.code);
+app.get("/", async (req, res) => {
+  if( typeof req.query.code != 'string') return res.send(400);
+  const result = await guildService.findByCode(req.query.code);
   if (result == null) return res.status(400).send("No object found");
   return res.send(result);
 })
+
+app.get("/:id", async (req, res) => {
+  const result = await guildService.findById(parseInt(req.params.id));
+  if (result == null) return res.status(400).send("No object found");
+  return res.send(result);
+})
+
 
 app.get("/:guildId/members/", async (req, res) => {
   if (isNaN(parseInt(req.params.guildId))) return res.sendStatus(400);
@@ -77,7 +81,8 @@ app.get("/:guildId/raids", async (req, res) => {
   const result = await Promise.all(raids.map(async (raid) => {
     const content = await contentService.findById(raid.contentId);
     const counts = await raidService.readMemberCountByRaid(raid);
-    return {...raid, content, ...counts as any}
+    const guild = await guildService.findById(raid.guildId);
+    return {guild:guild,...raid, content, ...counts as any}
   }))
   return res.send(result);
 })

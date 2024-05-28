@@ -61,6 +61,19 @@ async function findRaidByUserId(userId: number) {
   return results;
 }
 
+async function findRaidByUserId1(userId: number) {
+  const results = await raidMemberRepository.findByUserId(userId);
+  if (results instanceof Array) {
+    return Promise.all(results.map(async (result) => {
+      const raid = await raidRepository.findById(result.raidId);
+      if (isRaid(raid)) {
+        return {...raid, characterName:result.character};
+      }
+    }));
+  }
+  return results;
+}
+
 async function joinRaid(raid: Raid, user: User, character: string, role:number) {
   return await raidMemberRepository.save(raid, user, character, role);
 }
@@ -77,6 +90,6 @@ async function readMemberCountByRaid(raid:Raid){
 
 
 
-const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid, findRaidByUserId, updateById, readMemberCountByRaid};
+const raidService = {save, saveByGuildAndContent, findByGuild, findById, deleteById, joinRaid, findMembersByRaid, exitRaid, findRaidByUserId, updateById, findRaidByUserId1,readMemberCountByRaid};
 
 export default raidService;

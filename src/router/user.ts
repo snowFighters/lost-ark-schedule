@@ -44,22 +44,49 @@ router.get("/:userId/raids", async (req, res) => {
   if (!isUser(user)) return selectResponse(user, res);
 
   const result = await raidService.findRaidByUserId(user.id);
-  if(result == null || typeof result == "string") return res.send(400);
+  if (result == null || typeof result == "string") return res.send(400);
+  const b = [...new Set(result.map((x) => JSON.stringify(x))),].map((r) => JSON.parse(r))
 
-  const a = await Promise.all(result.map(async (r) => {
-    if(!r) return null;
+  const a = await Promise.all(b.map(async (r) => {
+    if (!r) return null;
     const guild = await guildService.findById(r.guildId);
     const counts = await raidService.readMemberCountByRaid(r);
     const content = await contentService.findById(r.contentId);
-
-    return {...r, guild:guild, content,  ...counts as any, };
+    return {...r, guild: guild, content, ...counts as any,};
   }));
+
   return res.send(a);
+})
+
+router.get("/:userId/character", async (req, res) => {
+  if (isNaN((parseInt(req.params.userId)))) return res.sendStatus(400);
+
+  const user = await userService.findById(parseInt(req.params.userId));
+  if (!isUser(user)) return selectResponse(user, res);
+  const result = await raidService.findRaidByUserId1(user.id);
+  if (result == null || typeof result == "string") return res.send(400);
+
+  const a = await Promise.all(result.map(async (r) => {
+    if (!r) return null;
+    const guild = await guildService.findById(r.guildId);
+    const counts = await raidService.readMemberCountByRaid(r);
+    const content = await contentService.findById(r.contentId);
+    return {...r, guild: guild, content, ...counts as any,};
+  }));
+
+  const b = a.reduce((acc, cur) => {
+    const index = acc.findIndex((item: any) => item.characterName == cur.characterName);
+    if (index == -1) acc.push({characterName: cur.characterName, contents: [cur.contentId]});
+    else acc[index].contents.push(cur.contentId)
+    return acc;
+  }, [])
+
+  return res.send(b)
 })
 
 router.post("/", async (req, res) => {
   if (!isUser(req.body)) return res.sendStatus(400);
-  if(await userService.findByEmail(req.body.email)) return res.sendStatus(400);
+  if (await userService.findByEmail(req.body.email)) return res.sendStatus(400);
   const result = await userService.save(req.body);
   return saveResponse(result, res);
 })
@@ -97,7 +124,7 @@ router.get("/api/auth/discord/redirect", async (req, res) => {
 
       const user = {
         email: userInfoJson.email,
-        characterName:userInfoJson.global_name,
+        characterName: userInfoJson.global_name,
         password: userInfoJson.id
       } as User;
       const result = await userRepository.save(user);

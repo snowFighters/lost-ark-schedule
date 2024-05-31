@@ -5,6 +5,7 @@ import {ResultSetHeader, RowDataPacket} from "mysql2";
 import {Guild} from "../domain/Guild.js";
 import {UserCharacter} from "../domain/form/UserCharacter.js";
 import {RaidCharacter} from "../domain/form/RaidCharacter";
+import getWednesday from "../util/getWendsday.js";
 
 interface UserCharacterForm extends RowDataPacket {
   user_id:number;
@@ -54,9 +55,12 @@ async function findByRaid(raid: Raid) {
   }
 }
 async function findByUserId(userId: number) {
-  const query = "SELECT raid_id, `character`, role FROM raid_member WHERE user_id = ?"
+  const next = getWednesday.nextWednesday(new Date());
+  const prev = getWednesday.previousWednesday(new Date());
+  const query = " SELECT raid_id, `character`, role FROM raid_member a JOIN raid r ON r.id = a.raid_id AND appoinment_time >= ? and appoinment_time < ? WHERE user_id = ? ; "
+ 
   try {
-    const [resultList] = await connection.query<RaidCharacterForm[]>(query, [userId]);
+    const [resultList] = await connection.query<RaidCharacterForm[]>(query, [prev, next, userId]);
     return resultList.map((result) => {return raidCharacterConvert(result)});
   } catch (e) {
     console.log(e);

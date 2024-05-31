@@ -3,6 +3,7 @@ import {connection} from "../config/dbconfig.js";
 import {Raid, RaidCreate} from "../domain/Raid.js";
 import {ResultSetHeader, RowDataPacket} from "mysql2";
 import {Guild} from "../domain/Guild.js";
+import getWednesday from "../util/getWendsday.js";
 
 interface RaidRow extends RowDataPacket {
   id: number,
@@ -50,9 +51,12 @@ async function findById(id: number) {
 }
 
 async function findByGuild(guild: Guild) {
-  const query = "SELECT * FROM raid WHERE guild_id = ? ORDER BY appoinment_time";
+  const query = "SELECT * FROM raid WHERE guild_id = ? and appoinment_time >= ? and appoinment_time < ? ORDER BY appoinment_time";
+  
+  const next = getWednesday.nextWednesday(new Date());
+  const prev = getWednesday.previousWednesday(new Date());
   try {
-    const [results] = await connection.query<RaidRow[]>(query, [guild.id]);
+    const [results] = await connection.query<RaidRow[]>(query, [guild.id, prev, next]);
     return results.map((result) => {
       return RaidRowToRaid(result)
     }).filter((result): result is Raid => result != null);

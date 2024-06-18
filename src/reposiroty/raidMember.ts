@@ -57,6 +57,7 @@ async function findByRaid(raid: Raid) {
 async function findByUserId(userId: number) {
   const next = getWednesday.nextWednesday(new Date());
   const prev = getWednesday.previousWednesday(new Date());
+  console.log(`prev: ${prev}, next:${next}`);
   const query = " SELECT raid_id, `character`, role FROM raid_member a JOIN raid r ON r.id = a.raid_id AND appoinment_time >= ? and appoinment_time < ? WHERE user_id = ? ; "
  
   try {

@@ -96,8 +96,8 @@ router.get("/api/auth/discord/redirect", async (req, res) => {
 
   if (typeof code == "string") {
     const formData = new url.URLSearchParams({
-      client_id: process.env.DISCORD_CLIENT_ID,
-      client_secret: process.env.DISCORD_CLIENT_SECRET,
+      client_id: '1235505831538069554',
+      client_secret: 'whI7EiNMhSqPoZfUBFNWolscdmOXEORX',
       grant_type: 'authorization_code',
       code: code.toString(),
       redirect_uri: "http://localhost:12312/users/api/auth/discord/redirect"
@@ -113,6 +113,7 @@ router.get("/api/auth/discord/redirect", async (req, res) => {
     const outputJson = await output.json()
     if (outputJson) {
       const access = outputJson.access_token;
+      console.log(`Bearer ${access}`)
       const userInfo = await fetch("https://discord.com/api/v10/users/@me", {
         headers: {
           "Authorization": `Bearer ${access}`,
@@ -127,7 +128,7 @@ router.get("/api/auth/discord/redirect", async (req, res) => {
         characterName: userInfoJson.global_name,
         password: userInfoJson.id
       } as User;
-      const result = await userRepository.save(user);
+      // const result = await userRepository.save(user);
     }
   }
 

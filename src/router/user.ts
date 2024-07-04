@@ -55,6 +55,10 @@ router.get("/:userId/raids", async (req, res) => {
     return {...r, guild: guild, content, ...counts as any,};
   }));
 
+
+  a.sort((a, b) => {
+    return new Date(a.appoinmentTime).getTime() - new Date(b.appoinmentTime).getTime();
+  });
   return res.send(a);
 })
 

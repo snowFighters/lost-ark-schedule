@@ -8,7 +8,7 @@ export function saveResponse(obj:any, response:express.Response){
   }else if (typeof obj == "number"){
     return response.send({insertId:obj});
   }
-  return response;
+  return response.status(500);
 }
 
 export function selectResponse(obj:any, response:express.Response){

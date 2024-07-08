@@ -29,17 +29,19 @@ export type UserApiSpec = Tspec.DefineApiSpec<{
         body: { email: string, password: string, characterName: string },
         responses: { insertId: number },
       },
-      patch: {
-        summary: '유저 이름 수정',
-        body: { email: string, password: string, characterName: string },
-        responses: { insertId: number },
-      },
+
     },
     '/users/{id}': {
       get: {
         summary: '유저 찾아오기',
         path: { id: number },
         responses: { 200: User },
+      },
+      patch: {
+        summary: '유저 이름 수정',
+        path: { id: number },
+        body: {characterName: string },
+        responses: { insertId: number },
       },
     },
     '/users/{id}/guilds': {

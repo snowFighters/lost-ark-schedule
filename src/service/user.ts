@@ -22,8 +22,8 @@ async function findGuildByUser(user:User){
   }
    return guildList;
 }
-async function updateCharacterNameById(user:User){
-  return await userRepository.updateCharacterNameById(user);
+async function updateCharacterNameById(id:number, characterName:string){
+  return await userRepository.updateCharacterNameById(id, characterName);
 }
 
 

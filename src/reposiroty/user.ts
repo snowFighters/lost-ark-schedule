@@ -74,11 +74,11 @@ async function findByIdList(idList:number[]){
   }
 }
 
-async function updateCharacterNameById(user:User){
+async function updateCharacterNameById(id:number, characterName:string){
   const query = "UPDATE user SET character_name = ? WHERE id = ?"
   try {
-    const [result] = await connection.query<ResultSetHeader>(query, [user.characterName, user.id]);
-    return result
+    const [result] = await connection.query<ResultSetHeader>(query, [characterName, id]);
+    return result.insertId
   } catch (e) {
     console.log(e);
     if (e instanceof Error) {

@@ -95,10 +95,10 @@ router.post("/", async (req, res) => {
   return saveResponse(result, res);
 })
 
-router.patch("/", async (req, res) => {
-  if (!isUser(req.body)) return res.sendStatus(400);
-  if (await userService.findByEmail(req.body.email)) return res.sendStatus(400);
-  const result = await userService.updateCharacterNameById(req.body);
+router.patch("/:id", async (req, res) => {
+  if (isNaN(parseInt(req.params.id)) || typeof req.body.characterName != "string") return res.sendStatus(400);
+  if (! await userService.findById(parseInt(req.params.id))) return res.sendStatus(400);
+  const result = await userService.updateCharacterNameById(parseInt(req.params.id), req.body.characterName);
   return saveResponse(result, res);
 })
 

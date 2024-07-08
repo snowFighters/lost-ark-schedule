@@ -22,7 +22,10 @@ async function findGuildByUser(user:User){
   }
    return guildList;
 }
+async function updateCharacterNameById(user:User){
+  return await userRepository.updateCharacterNameById(user);
+}
 
 
-const userService = {save, findById, findGuildByUser, findByEmail};
+const userService = {save, findById, findGuildByUser, findByEmail, updateCharacterNameById};
 export default userService;

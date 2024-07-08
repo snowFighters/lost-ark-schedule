@@ -95,6 +95,13 @@ router.post("/", async (req, res) => {
   return saveResponse(result, res);
 })
 
+router.patch("/", async (req, res) => {
+  if (!isUser(req.body)) return res.sendStatus(400);
+  if (await userService.findByEmail(req.body.email)) return res.sendStatus(400);
+  const result = await userService.updateCharacterNameById(req.body);
+  return saveResponse(result, res);
+})
+
 router.get("/api/auth/discord/redirect", async (req, res) => {
   const {code} = req.query;
 

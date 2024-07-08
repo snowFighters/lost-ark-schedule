@@ -74,6 +74,22 @@ async function findByIdList(idList:number[]){
   }
 }
 
+async function updateCharacterNameById(user:User){
+  const query = "UPDATE user SET character_name = ? WHERE id = ?"
+  try {
+    const [result] = await connection.query<ResultSetHeader>(query, [user.characterName, user.id]);
+    return result
+  } catch (e) {
+    console.log(e);
+    if (e instanceof Error) {
+      if ("sqlMessage" in e && typeof e.sqlMessage === "string") {
+        return e.sqlMessage;
+      }
+    }
+    return null;
+  }
+}
 
-const userRepository = {save, findById, findByIdList, findByEmail};
+
+const userRepository = {save, findById, findByIdList, findByEmail, updateCharacterNameById};
 export default userRepository;
